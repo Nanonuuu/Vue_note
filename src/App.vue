@@ -1,28 +1,98 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <MyHeader :receive="receive" />
+    <MyList
+      :todos="todos"
+      :changeMood="changeMood"
+      :handleDelete="handleDelete"
+    />
+    <MyFooter :todos="todos" :selectAll="selectAll" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import MyList from "./components/MyList.vue";
+import MyFooter from "./components/MyFooter.vue";
+import MyHeader from "./components/MyHeader.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    MyList,
+    MyFooter,
+    MyHeader,
+  },
+  data() {
+    return {
+      todos: [
+        { id: "001", name: "鼠魔克", done: true },
+        { id: "002", name: "Drink", done: false },
+        { id: "003", name: "开车", done: true },
+      ],
+    };
+  },
+  methods: {
+    receive(obj) {
+      this.todos.unshift(obj);
+    },
+    changeMood(obj) {
+      obj.done = !obj.done;
+      console.log(obj.id);
+    },
+    handleDelete(obj) {
+      if (confirm("确认删除吗？")) {
+        this.todos = this.todos.filter((item) => item != obj);
+      }
+    },
+    selectAll(mood) {
+      this.todos.forEach((item) => (item.done = mood));
+    },
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/*base*/
+body {
+  background: #fff;
+}
+
+.btn {
+  display: inline-block;
+  padding: 4px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 20px;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  vertical-align: middle;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: #da4f49;
+  border: 1px solid #bd362f;
+}
+
+.btn-danger:hover {
+  color: #fff;
+  background-color: #bd362f;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.todo-container {
+  width: 600px;
+  margin: 0 auto;
+}
+.todo-container .todo-wrap {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 </style>
